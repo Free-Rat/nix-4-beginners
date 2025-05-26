@@ -1,59 +1,113 @@
 # nix-4-beginners
 
-## 0. Prerekwizyty:
+## 0. Prerekwizyty
 
-#### Wymagania
+### Wymagania
 
-    System operacyjny: Linux lub macOS (WSL2 na Windowsie)
+- System operacyjny: Linux lub macOS (możliwe także WSL2 na Windowsie)
+- Dostęp do terminala
+- Zainstalowany Git
 
-    Dostęp do terminala
-
-    Git zainstalowany lokalnie
-
-#### Instalacja Nix
+### Instalacja Nix
 
 Otwórz terminal i wykonaj:
 
-```
+```bash
 curl -L https://nixos.org/nix/install | sh
 ```
 
+Po zakończeniu instalacji, postępuj zgodnie z instrukcjami wyświetlonymi w
+terminalu (zazwyczaj będzie to ponowne otwarcie terminala lub załadowanie
+Środowiska poprzez `source ~/.nix-profile/etc/profile.d/nix.sh`).
+
+---
+
 ## 1. Wstęp
 
-- nix jako 'zwykły' package manager
-- czym różni się nix of innych package managerów
-- /nix/store/
-- wiele wersji jednej paczki
-- deklaratywne budowanie przy pomocy Flakes
-- czym jest flake.nix
-- czym jest flake.lock
+- **Nix jako 'zwykły' package manager**\
+  Pozwala instalować pakiety użytkownika bez ingerencji w systemowe repozytoria.
 
-## 2. Budowanie paczki Python
+- **Czym różni się Nix od innych menedżerów pakietów?**
+  - Deterministyczne buildy
+  - Izolowane środowiska
+  - Bezpieczna współpraca wielu wersji pakietów
 
-- anatomia flake.nix na przykładzie python
-- omówienie: source, buildInputs, nativeBuildInputs, dependensies
-- zbudownaie paczki: nix build
-- uruchomienie ./result/bin/nazwa_paczki
+- **`/nix/store/`**\
+  Główna lokalizacja przechowywania wszystkich zależności i pakietów —
+  identyfikacja przez hash.
 
-### 2.a budowanie paczki w Rust / Node / ...
+- **Wiele wersji jednej paczki**\
+  Równoległe instalowanie np. dwóch wersji Pythona, bez konfliktów.
 
-## 3. Własne tworzenie paczki C/C++
+- **Deklaratywne budowanie przy pomocy Flakes**\
+  Powtarzalne, wersjonowane środowiska.
 
-- ...
+- **Czym jest `flake.nix`**\
+  Plik konfiguracyjny zawierający deklarację projektu (np. paczki, środowiska,
+  aplikacji).
+
+- **Czym jest `flake.lock`**\
+  Plik z zamrożonymi wersjami zależności — gwarancja powtarzalności.
+
+---
+
+## 2. Budowanie paczki w Pythonie
+
+- **Anatomia `flake.nix` dla projektu Python**\
+  Przykład zawiera sekcje:
+  - `inputs` – zależności zewnętrzne
+  - `outputs` – co budujemy
+  - `buildInputs`, `nativeBuildInputs`, `dependencies` – zależności projektu
+
+- **Budowanie paczki**
+
+```bash
+nix build
+```
+
+- **Uruchomienie aplikacji**
+
+```bash
+./result/bin/nazwa_paczki
+```
+
+---
+
+### 2.a Budowanie paczek w innych językach
+
+- Rust
+- Node.js
+- Go _(analogiczne podejście jak w Pythonie — zmieniają się tylko zależności i
+  narzędzia buildujące)_
+
+---
+
+## 3. Tworzenie własnej paczki w C/C++
+
+Opis krok po kroku:
+
+- Przygotowanie `default.nix` lub `flake.nix`
+- Zdefiniowanie źródła (`src`)
+- Dodanie zależności (`gcc`, `make`, itp.)
+- Kompilacja przy pomocy `nix build`
+
+---
 
 ## Zasoby
 
-Oficjalna dokumentacja Nix: https://nix.dev Nix
+- Oficjalna dokumentacja Nix: [https://nix.dev](https://nix.dev)
 
-Tutoriale „Packaging existing software” (C/C++):
-https://nix.dev/tutorials/packaging-existing-software.html Nix
+- Tutorial „Packaging existing software” (C/C++):
+  [https://nix.dev/tutorials/packaging-existing-software.html](https://nix.dev/tutorials/packaging-existing-software.html)
 
-Nix Pills (stdenv):
-https://nixos.org/guides/nix-pills/19-fundamentals-of-stdenv.html NixOS
+- **Nix Pills (stdenv)** – zaawansowane zrozumienie środowiska buildów:
+  [https://nixos.org/guides/nix-pills/19-fundamentals-of-stdenv.html](https://nixos.org/guides/nix-pills/19-fundamentals-of-stdenv.html)
 
-Cachix: https://cachix.org cachix.org
+- **Cachix** – zewnętrzna pamięć podręczna dla buildów:
+  [https://cachix.org](https://cachix.org)
 
-Flakes Anatomy: Discourse NixOS NixOS Discourse
+- **Flakes Anatomy** – wyjaśnienie struktury flake:
+  [https://discourse.nixos.org/t/flake-anatomy](https://discourse.nixos.org/t/flake-anatomy)
 
-CI z GitHub Actions:
-https://nix.dev/guides/recipes/continuous-integration-github-actions.html Nix
+- **CI z GitHub Actions** (integracja z Nix):
+  [https://nix.dev/guides/recipes/continuous-integration-github-actions.html](https://nix.dev/guides/recipes/continuous-integration-github-actions.html)
